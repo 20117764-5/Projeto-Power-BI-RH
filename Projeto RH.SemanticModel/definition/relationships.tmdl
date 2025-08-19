@@ -1,0 +1,48 @@
+relationship 9172111a-4b09-4e09-bf2b-3dfe97f65a5f
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Tb_RH.'DATA ADIMISSAO'
+	toColumn: LocalDateTable_ab19c5e9-a319-4452-932a-f7051e3fade3.Date
+
+relationship 3a3b7d56-28f1-49c4-8bef-1ad2490de11e
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Plan1.'Data '
+	toColumn: LocalDateTable_0e8f9691-513b-408d-9a8c-3b4cf51d15f2.Date
+
+relationship ebaa13c5-70cf-4a53-8505-303a2a76b661
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Pacientes.'Data de Cadastro'
+	toColumn: LocalDateTable_8f8b7c86-8065-4cd1-8f7e-ad2a8e500c38.Date
+
+relationship 7678c660-7bb9-4789-a15b-45f7f9eaed7f
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'Plano Alimentar'.'Data de Início'
+	toColumn: LocalDateTable_3b6a20a2-c7e8-4288-8c88-86ec059cd849.Date
+
+relationship eafb8d28-ca69-426c-9b66-0769a95a6697
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Evolução.'Data da Medição'
+	toColumn: LocalDateTable_4ab5890a-ea69-4110-a867-2ed20e92946f.Date
+
+relationship 1b9960d6-8aff-456b-ab77-c02d1c97f072
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Consultas.'Data da Consulta'
+	toColumn: LocalDateTable_2e515f8c-6b74-477c-a46d-f56f232c6e09.Date
+
+relationship AutoDetected_7457e793-b864-4b9c-936c-bef791aa0a43
+	crossFilteringBehavior: bothDirections
+	fromCardinality: one
+	fromColumn: 'Plano Alimentar'.'ID Paciente'
+	toColumn: Pacientes.'ID Paciente'
+
+relationship AutoDetected_f384efe7-b010-4ccf-8fb2-99f10fd6d381
+	crossFilteringBehavior: bothDirections
+	fromCardinality: one
+	fromColumn: Evolução.'ID Paciente'
+	toColumn: Pacientes.'ID Paciente'
+
+relationship AutoDetected_af6a7d7e-93ba-47e1-9b98-19c72bdb9d0e
+	crossFilteringBehavior: bothDirections
+	fromCardinality: one
+	fromColumn: Consultas.'ID Paciente'
+	toColumn: Pacientes.'ID Paciente'
+

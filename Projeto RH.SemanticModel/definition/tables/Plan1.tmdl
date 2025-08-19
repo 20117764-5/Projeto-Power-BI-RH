@@ -1,0 +1,93 @@
+table Plan1
+	lineageTag: def9376d-ae66-4bcd-ba7e-e02eef6555e2
+
+	measure 'total de vendas' = SUM(Plan1[Total Venda])
+		formatString: "R$"\ #,0;-"R$"\ #,0;"R$"\ #,0
+		lineageTag: 442312f0-8f4f-4916-b373-1b1b6acba6a7
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure 'TOTAL DE QUANTIDADE VENDIDA' = SUM(Plan1[Quantidade])
+		formatString: 0
+		lineageTag: 5545dc95-15d2-4ee8-8ed9-0f60e75fec14
+
+	measure 'VALOR MINIMO' = 2000
+		formatString: 0
+		lineageTag: 14c24ac1-3c98-4159-ac8f-00be2506cda5
+
+	measure 'VALOR MAXIMO' = 7000
+		formatString: 0
+		lineageTag: d0f2428c-7c6e-4b6e-ad35-726a93d254a9
+
+	column 'Data '
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: bb941c3a-9cee-4595-8604-09c75136d965
+		summarizeBy: none
+		sourceColumn: "Data "
+
+		variation Variation
+			isDefault
+			relationship: 3a3b7d56-28f1-49c4-8bef-1ad2490de11e
+			defaultHierarchy: LocalDateTable_0e8f9691-513b-408d-9a8c-3b4cf51d15f2.'Hierarquia de datas'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Produto
+		dataType: string
+		lineageTag: b8751296-56e8-4183-8258-532627dba564
+		summarizeBy: none
+		sourceColumn: Produto
+
+		annotation SummarizationSetBy = Automatic
+
+	column Categoria
+		dataType: string
+		lineageTag: 030f5fde-c440-4154-b052-867695419dd2
+		summarizeBy: none
+		sourceColumn: Categoria
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quantidade
+		dataType: int64
+		formatString: 0
+		lineageTag: 31bc4a8d-3ea9-4d63-9387-4c665de01a14
+		summarizeBy: sum
+		sourceColumn: Quantidade
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Preço Unitário'
+		dataType: int64
+		formatString: 0
+		lineageTag: d9ddd819-2b27-4389-837c-f88265f8dcf8
+		summarizeBy: sum
+		sourceColumn: Preço Unitário
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Total Venda'
+		dataType: int64
+		formatString: 0
+		lineageTag: 07007e67-3677-47e5-8fad-39cc81786cc6
+		summarizeBy: sum
+		sourceColumn: Total Venda
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Plan1 = m
+		mode: import
+		source =
+				let
+				    Fonte = Excel.Workbook(File.Contents("C:\Users\thiag\OneDrive\Ambiente de Trabalho\Power BI\Novo(a) Planilha do Microsoft Excel.xlsx"), null, true),
+				    Plan1_Sheet = Fonte{[Item="Plan1",Kind="Sheet"]}[Data],
+				    #"Cabeçalhos Promovidos" = Table.PromoteHeaders(Plan1_Sheet, [PromoteAllScalars=true]),
+				    #"Tipo Alterado" = Table.TransformColumnTypes(#"Cabeçalhos Promovidos",{{"Data ", type date}, {"Produto", type text}, {"Categoria", type text}, {"Quantidade", Int64.Type}, {"Preço Unitário", Int64.Type}, {"Total Venda", Int64.Type}})
+				in
+				    #"Tipo Alterado"
+
+	annotation PBI_ResultType = Table
+

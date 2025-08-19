@@ -1,0 +1,58 @@
+table Consultas
+	lineageTag: 84c371ec-2633-40e0-96ac-15ca7cac6be0
+
+	column 'ID Consulta'
+		dataType: int64
+		formatString: 0
+		lineageTag: 2ceb4639-0cac-48c4-8f36-31fdf9cea4c2
+		summarizeBy: sum
+		sourceColumn: ID Consulta
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'ID Paciente'
+		dataType: int64
+		formatString: 0
+		lineageTag: 7cf0dbd8-c51d-4b92-923c-0543670d5994
+		summarizeBy: none
+		sourceColumn: ID Paciente
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Data da Consulta'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: ff04f473-e8ab-4534-b398-ab1cd22be7d7
+		summarizeBy: none
+		sourceColumn: Data da Consulta
+
+		variation Variation
+			isDefault
+			relationship: 1b9960d6-8aff-456b-ab77-c02d1c97f072
+			defaultHierarchy: LocalDateTable_2e515f8c-6b74-477c-a46d-f56f232c6e09.'Hierarquia de datas'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Status
+		dataType: string
+		lineageTag: e522d0c9-aa93-4ddf-a76e-2eda62b9d319
+		summarizeBy: none
+		sourceColumn: Status
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Consultas = m
+		mode: import
+		source =
+				let
+				    Fonte = Excel.Workbook(File.Contents("C:\Users\thiag\Downloads\dados_pacientes.xlsx"), null, true),
+				    Consultas_Sheet = Fonte{[Item="Consultas",Kind="Sheet"]}[Data],
+				    #"Cabeçalhos Promovidos" = Table.PromoteHeaders(Consultas_Sheet, [PromoteAllScalars=true]),
+				    #"Tipo Alterado" = Table.TransformColumnTypes(#"Cabeçalhos Promovidos",{{"ID Consulta", Int64.Type}, {"ID Paciente", Int64.Type}, {"Data da Consulta", type date}, {"Status", type text}})
+				in
+				    #"Tipo Alterado"
+
+	annotation PBI_ResultType = Table
+

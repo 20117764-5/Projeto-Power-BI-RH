@@ -1,0 +1,66 @@
+table Pacientes
+	lineageTag: de4533c5-79e7-4c8e-ad1e-e1bde998d34d
+
+	column 'ID Paciente'
+		dataType: int64
+		formatString: 0
+		lineageTag: 9f7592c0-440b-427c-beb6-2a90440dcc5f
+		summarizeBy: none
+		sourceColumn: ID Paciente
+
+		annotation SummarizationSetBy = Automatic
+
+	column Nome
+		dataType: string
+		lineageTag: badf19ce-b6a2-4c98-8152-c167e2a50843
+		summarizeBy: none
+		sourceColumn: Nome
+
+		annotation SummarizationSetBy = Automatic
+
+	column Idade
+		dataType: int64
+		formatString: 0
+		lineageTag: cdcc000d-94de-4633-b7b5-7c7416ff2fad
+		summarizeBy: sum
+		sourceColumn: Idade
+
+		annotation SummarizationSetBy = Automatic
+
+	column Sexo
+		dataType: string
+		lineageTag: f157ccb9-c173-4a9f-99dc-ac82e711b448
+		summarizeBy: none
+		sourceColumn: Sexo
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Data de Cadastro'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: ed0e81fe-b02f-4651-923c-4dd898f9ebb8
+		summarizeBy: none
+		sourceColumn: Data de Cadastro
+
+		variation Variation
+			isDefault
+			relationship: ebaa13c5-70cf-4a53-8505-303a2a76b661
+			defaultHierarchy: LocalDateTable_8f8b7c86-8065-4cd1-8f7e-ad2a8e500c38.'Hierarquia de datas'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	partition Pacientes = m
+		mode: import
+		source =
+				let
+				    Fonte = Excel.Workbook(File.Contents("C:\Users\thiag\Downloads\dados_pacientes.xlsx"), null, true),
+				    Pacientes_Sheet = Fonte{[Item="Pacientes",Kind="Sheet"]}[Data],
+				    #"Cabeçalhos Promovidos" = Table.PromoteHeaders(Pacientes_Sheet, [PromoteAllScalars=true]),
+				    #"Tipo Alterado" = Table.TransformColumnTypes(#"Cabeçalhos Promovidos",{{"ID Paciente", Int64.Type}, {"Nome", type text}, {"Idade", Int64.Type}, {"Sexo", type text}, {"Data de Cadastro", type date}})
+				in
+				    #"Tipo Alterado"
+
+	annotation PBI_ResultType = Exception
+

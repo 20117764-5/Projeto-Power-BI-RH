@@ -1,0 +1,49 @@
+table 'Plano Alimentar'
+	lineageTag: c7717517-38d6-44b5-be47-bec6e10237ac
+
+	column 'ID Paciente'
+		dataType: int64
+		formatString: 0
+		lineageTag: e561cfc4-542b-4bbc-9458-f5cbb2788bdc
+		summarizeBy: none
+		sourceColumn: ID Paciente
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Data de Início'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 1c1bd78f-2f6b-43b6-89c7-43dce5a3fb1a
+		summarizeBy: none
+		sourceColumn: Data de Início
+
+		variation Variation
+			isDefault
+			relationship: 7678c660-7bb9-4789-a15b-45f7f9eaed7f
+			defaultHierarchy: LocalDateTable_3b6a20a2-c7e8-4288-8c88-86ec059cd849.'Hierarquia de datas'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Adesão ao Plano'
+		dataType: string
+		lineageTag: bc429416-7b85-41be-a293-56fe9c3c7ae9
+		summarizeBy: none
+		sourceColumn: Adesão ao Plano
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Plano Alimentar' = m
+		mode: import
+		source =
+				let
+				    Fonte = Excel.Workbook(File.Contents("C:\Users\thiag\Downloads\dados_pacientes.xlsx"), null, true),
+				    #"Plano Alimentar_Sheet" = Fonte{[Item="Plano Alimentar",Kind="Sheet"]}[Data],
+				    #"Cabeçalhos Promovidos" = Table.PromoteHeaders(#"Plano Alimentar_Sheet", [PromoteAllScalars=true]),
+				    #"Tipo Alterado" = Table.TransformColumnTypes(#"Cabeçalhos Promovidos",{{"ID Paciente", Int64.Type}, {"Data de Início", type date}, {"Adesão ao Plano", type text}})
+				in
+				    #"Tipo Alterado"
+
+	annotation PBI_ResultType = Exception
+

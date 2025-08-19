@@ -1,0 +1,103 @@
+table Evolução
+	lineageTag: a7be708c-ed6b-4bff-a825-4f08ade171db
+
+	measure 'IIMC Médio' = AVERAGE('Evolução'[IMC])
+		lineageTag: 3e8769f5-2e44-407d-bef6-7c36ea193bb8
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'ID Evolução'
+		dataType: int64
+		formatString: 0
+		lineageTag: 9f644ead-69d8-4e38-bbce-86685383a687
+		summarizeBy: sum
+		sourceColumn: ID Evolução
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'ID Paciente'
+		dataType: int64
+		formatString: 0
+		lineageTag: fa2403b5-5c97-42a2-b2a2-b9f2c30baf51
+		summarizeBy: none
+		sourceColumn: ID Paciente
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Data da Medição'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 8042b320-4edd-43c9-9e21-ab8858d81b19
+		summarizeBy: none
+		sourceColumn: Data da Medição
+
+		variation Variation
+			isDefault
+			relationship: eafb8d28-ca69-426c-9b66-0769a95a6697
+			defaultHierarchy: LocalDateTable_4ab5890a-ea69-4110-a867-2ed20e92946f.'Hierarquia de datas'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Peso (kg)'
+		dataType: double
+		lineageTag: 16d13b91-bec3-4c02-b58b-7e6c29c588b6
+		summarizeBy: sum
+		sourceColumn: Peso (kg)
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Altura (m)'
+		dataType: double
+		lineageTag: 13c26866-0cb0-484b-8824-e98a5de20651
+		summarizeBy: sum
+		sourceColumn: Altura (m)
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column IMC
+		dataType: double
+		lineageTag: 197db011-0afd-44f9-97d4-53e629b510a7
+		summarizeBy: sum
+		sourceColumn: IMC
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Percentual de Gordura'
+		dataType: int64
+		formatString: 0
+		lineageTag: 314713f1-90f4-4e7a-b4f4-b4cdbb297740
+		summarizeBy: sum
+		sourceColumn: Percentual de Gordura
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Massa Muscular'
+		dataType: int64
+		formatString: 0
+		lineageTag: 94c43abf-f6c5-4bec-8c32-a98f9dc32d88
+		summarizeBy: sum
+		sourceColumn: Massa Muscular
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Evolução = m
+		mode: import
+		source =
+				let
+				    Fonte = Excel.Workbook(File.Contents("C:\Users\thiag\Downloads\dados_pacientes.xlsx"), null, true),
+				    Evolução_Sheet = Fonte{[Item="Evolução",Kind="Sheet"]}[Data],
+				    #"Cabeçalhos Promovidos" = Table.PromoteHeaders(Evolução_Sheet, [PromoteAllScalars=true]),
+				    #"Tipo Alterado" = Table.TransformColumnTypes(#"Cabeçalhos Promovidos",{{"ID Evolução", Int64.Type}, {"ID Paciente", Int64.Type}, {"Data da Medição", type date}, {"Peso (kg)", type number}, {"Altura (m)", type number}, {"IMC", type number}, {"Percentual de Gordura", Int64.Type}, {"Massa Muscular", Int64.Type}})
+				in
+				    #"Tipo Alterado"
+
+	annotation PBI_ResultType = Exception
+

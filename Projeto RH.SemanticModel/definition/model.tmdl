@@ -1,0 +1,32 @@
+model Model
+	culture: pt-BR
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: pt-BR
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation PBI_QueryOrder = ["Tb_RH","Plan1","Pacientes","Plano Alimentar","Evolução","Consultas"]
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBIDesktopVersion = 2.140.1577.0 (25.02)+00af0910c5ca19a229c472b0dfc17a2c488f6b0a
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table Tb_RH
+ref table DateTableTemplate_829e224c-03da-4656-9652-5b4fa5ca18dd
+ref table LocalDateTable_ab19c5e9-a319-4452-932a-f7051e3fade3
+ref table Plan1
+ref table LocalDateTable_0e8f9691-513b-408d-9a8c-3b4cf51d15f2
+ref table Pacientes
+ref table LocalDateTable_8f8b7c86-8065-4cd1-8f7e-ad2a8e500c38
+ref table 'Plano Alimentar'
+ref table LocalDateTable_3b6a20a2-c7e8-4288-8c88-86ec059cd849
+ref table Evolução
+ref table LocalDateTable_4ab5890a-ea69-4110-a867-2ed20e92946f
+ref table Consultas
+ref table LocalDateTable_2e515f8c-6b74-477c-a46d-f56f232c6e09
+
+ref cultureInfo pt-BR
+
